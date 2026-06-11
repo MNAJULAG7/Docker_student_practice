@@ -1,0 +1,45 @@
+services:
+  student_app:
+    build: .\student
+    container_name: student-app
+    ports:
+      - 8081:8081
+    networks:
+      - mynetwork
+    depends_on:
+      - mysql
+    restart: always
+
+  student_ui:
+    build: .\student_ui
+    container_name: frontend
+    ports:
+      - 8000:80
+    depends_on:
+      - student_app
+    networks:
+      - mynetwork
+
+
+
+  mysql:
+    image: mysql
+    container_name: data-storing
+    ports:
+      - 3307:3306
+    volumes:
+      - data:/var/lib/mysql
+    networks:
+      - mynetwork
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: students
+      MYSQL_USER: manju
+      MYSQL_PASSWORD: manju
+
+
+
+volumes:
+  data:
+networks:
+  mynetwork:

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Student Form</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #007bff;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    .result {
+      margin-top: 15px;
+      padding: 10px;
+      background: #e9ffe9;
+      border: 1px solid #b2ffb2;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+  <h2>Student Form</h2>
+
+  <input type="text" id="name" placeholder="Enter Name" />
+  <input type="text" id="department" placeholder="Enter Department" />
+  <input type="text" id="section" placeholder="Enter Section" />
+
+  <button onclick="submitData()">Submit</button>
+
+  <div id="result" class="result" style="display:none;"></div>
+</div>
+
+<script>
+  async function submitData() {
+    const student = {
+      name: document.getElementById("name").value,
+      department: document.getElementById("department").value,
+      section: document.getElementById("section").value
+    };
+
+    try {
+      const response = await fetch("http://localhost:8081/api/students/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(student)
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to submit data");
+      }
+
+      const data = await response.json();
+
+      document.getElementById("result").style.display = "block";
+      document.getElementById("result").innerHTML = `
+        <b>Saved Successfully 🎉</b><br/>
+        ID: ${data.id}<br/>
+        Name: ${data.name}<br/>
+        Department: ${data.department}<br/>
+        Section: ${data.section}
+      `;
+
+    } catch (error) {
+      alert("Error: " + error.message);
+    }
+  }
+</script>
+
+</body>
+</html>
