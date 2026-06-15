@@ -1,6 +1,6 @@
 services:
   student_app:
-    build: .\student
+    build: ./student
     container_name: student-app
     ports:
       - 8081:8081
@@ -11,7 +11,7 @@ services:
     restart: always
 
   student_ui:
-    build: .\student_ui
+    build: ./student_ui
     container_name: frontend
     ports:
       - 8000:80
